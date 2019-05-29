@@ -496,7 +496,8 @@ class DPlayer {
 
     switchQuality (index) {
         index = typeof index === 'string' ? parseInt(index) : index;
-        if (this.qualityIndex === index || this.switchingQuality) {
+        this.events.trigger('quality_start', this.quality);
+        if (this.qualityIndex === index || this.switchingQuality||this.options.video.quality[index].switchingQuality) {
             return;
         }
         else {
@@ -523,7 +524,7 @@ class DPlayer {
         this.initVideo(this.video, this.quality.type || this.options.video.type);
         this.seek(this.prevVideo.currentTime);
         this.notice(`${this.tran('Switching to')} ${this.quality.name} ${this.tran('quality')}`, -1);
-        this.events.trigger('quality_start', this.quality);
+      
 
         this.on('canplay', () => {
             if (this.prevVideo) {
